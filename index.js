@@ -96,7 +96,7 @@ function updateEmployeeRole() {
                 message: "What is the employee's new role ID?"
             }
         ]).then(answers => {
-            connection.query("UPDATE products SET ? WHERE ?", [{
+            connection.query("UPDATE employee SET ? WHERE ?", [{
                         role_id: answers.roleID
                     },
                     {
@@ -106,10 +106,77 @@ function updateEmployeeRole() {
                 function (err, res) {
                     if (err) throw err;
                     console.log(res.affectedRows + " employee role updated!\n");
-                    // Call deleteProduct AFTER the UPDATE completes
                     main();
                 })
         })
     })
+};
+
+function addEmployee() {
+    inquirer.prompt([{
+            type: "input",
+            name: "employeeFirstName",
+            message: "What is the employee's first name?"
+        },
+        {
+            type: "input",
+            name: "employeeLastName",
+            message: "What is the employee's last name?"
+        },
+        {
+            type: "input",
+            name: "employeeRoleID",
+            message: "What is the employee's role ID?"
+        },
+        {
+            type: "input",
+            name: "employeeManagerID",
+            message: "What is the employee's manager ID?"
+        },
+    ]).then(answers => {
+        connection.query(
+            "INSERT INTO employee SET ?", {
+                first_name: answers.employeeFirstName,
+                last_name: answers.employeeLastName,
+                role_id: answers.employeeRoleID,
+                manager_id: answers.employeeManagerID
+            },
+            function (err, res) {
+                if (err) throw err;
+                console.log(res.affectedRows + " employee added!\n");
+                main();
+            })
+    })
+};
+
+function addEmployeeRole() {
+    inquirer.prompt([{
+        type: "input",
+        name: "employeeTitle",
+        message: "What is the employee's title?"
+    },
+    {
+        type: "input",
+        name: "employeeSalary",
+        message: "What is the employee's salary?"
+    },
+    {
+        type: "input",
+        name: "employeeDepartmentID",
+        message: "What is the employee's department id?"
+    },
+]).then(answers => {
+    connection.query(
+        "INSERT INTO role SET ?", {
+            title: answers.employeeTitle,
+            salary: answers.employeeSalary,
+            department_id: answers.employeeDepartmentID
+        },
+        function (err, res) {
+            if (err) throw err;
+            console.log(res.affectedRows + " employee role added!\n");
+            main();
+        })
+})
 };
 
